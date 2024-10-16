@@ -1,29 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.text.Font?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ghostcompany.mystats.Controller.NavBarController">
+<AnchorPane prefHeight="400.0" prefWidth="100.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ghostcompany.mystats.Controller.NavBarController">
    <children>
-      <VBox alignment="CENTER_LEFT" layoutX="25.0" layoutY="74.0" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0">
-         <padding><Insets top="10.0" right="10.0" left="10.0" bottom="10.0" /></padding>
+      <VBox alignment="CENTER_LEFT" layoutX="25.0" layoutY="74.0" prefHeight="380.0" prefWidth="100.0" spacing="10.0" styleClass="sidebar" stylesheets="@stylesheet.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
          <children>
-            <Label text="Menu">
-               <font><Font name="Roboto Bold" size="15.0" /></font>
+            <Label styleClass="sidebarTitle" text="Menu">
+               <font>
+                  <Font name="Roboto Bold" size="15.0" />
+               </font>
             </Label>
-            <Separator />
-            <Button text="Activity Log" onAction="#showLog" />
-            <Button text="Accounts" onAction="#showAccounts" />
-            <Button text="Activities" onAction="#showActivities" />
-            <Button text="Settings" onAction="#showSettings" />
-            <Button text="Status" onAction="#showReport" />
-            <Separator />
-            <Button text="Logout" onAction="#logout" />
+            <Separator prefWidth="200.0" styleClass="sidebarSeparator" />
+            <Button mnemonicParsing="false" onAction="#showAddEntry" prefHeight="30.0" prefWidth="140.0" styleClass="btn" text="Add">
+               <font>
+                  <Font size="10.0" />
+               </font></Button>
+            <Button layoutX="20.0" layoutY="64.0" mnemonicParsing="false" onAction="#showLog" prefHeight="30.0" prefWidth="140.0" styleClass="btn" text="Activity Log">
+               <font>
+                  <Font size="10.0" />
+               </font></Button>
+            <Button layoutX="20.0" layoutY="64.0" mnemonicParsing="false" onAction="#showReport" prefHeight="30.0" prefWidth="140.0" styleClass="btn" text="Status">
+               <font>
+                  <Font size="10.0" />
+               </font></Button>
+            <Button layoutX="20.0" layoutY="104.0" mnemonicParsing="false" onAction="#showAccounts" prefHeight="30.0" prefWidth="140.0" styleClass="btn" text="Accounts">
+               <font>
+                  <Font size="10.0" />
+               </font></Button>
+            <Button layoutX="20.0" layoutY="145.0" mnemonicParsing="false" onAction="#showActivities" prefHeight="30.0" prefWidth="140.0" styleClass="btn" text="Activities">
+               <font>
+                  <Font size="10.0" />
+               </font></Button>
+            <Button layoutX="20.0" layoutY="186.0" mnemonicParsing="false" onAction="#showSettings" prefHeight="30.0" prefWidth="140.0" styleClass="btn" text="Settings">
+               <font>
+                  <Font size="10.0" />
+               </font></Button>
+            <Separator styleClass="sidebarSeparator" />
+            <Button layoutX="20.0" layoutY="268.0" mnemonicParsing="false" onAction="#logout" prefHeight="30.0" prefWidth="140.0" styleClass="btn" text="Logout">
+               <font>
+                  <Font size="10.0" />
+               </font></Button>
          </children>
       </VBox>
    </children>

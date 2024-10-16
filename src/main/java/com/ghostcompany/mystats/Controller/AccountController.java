@@ -1,7 +1,7 @@
 package com.ghostcompany.mystats.Controller;
 
 import com.ghostcompany.mystats.Model.Account.Account;
-import com.ghostcompany.mystats.Service.AcconutDAO;
+import com.ghostcompany.mystats.Service.AccountDAO;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
@@ -16,7 +16,7 @@ import java.util.ResourceBundle;
 
 public class AccountController implements Initializable {
     private List<Account> accounts = new ArrayList<>();
-    private AcconutDAO accountHandler = new AcconutDAO();
+    private AccountDAO accountHandler = new AccountDAO();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

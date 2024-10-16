@@ -1,13 +1,267 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import com.gluonhq.charm.glisten.control.Icon?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ghostcompany.mystats.Controller.EntryController">
+   <children>
+      <TabPane prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.leftAnchor="0.0">
+        <tabs>
+          <Tab fx:id="expensesTab" text="Expenses">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="207.0" prefWidth="336.0">
+                     <children>
+                        <VBox alignment="CENTER" prefHeight="344.0" prefWidth="600.0">
+                           <children>
+                              <HBox alignment="CENTER" layoutX="10.0" layoutY="62.0" maxHeight="80.0" prefWidth="600.0" spacing="30.0" VBox.vgrow="ALWAYS">
+                                 <padding>
+                                    <Insets left="30.0" right="30.0" />
+                                 </padding>
+                                 <children>
+                                    <Button fx:id="incomeBtn" maxWidth="250.0" mnemonicParsing="false" onAction="#setTransactionToIncome" styleClass="btn" text="Income" HBox.hgrow="ALWAYS">
+                                       <graphic>
+                                          <Icon content="ARROW_DOWNWARD" />
+                                       </graphic>
+                                    </Button>
+                                    <Button fx:id="expenseBtn" layoutX="271.0" layoutY="10.0" maxWidth="250.0" mnemonicParsing="false" onAction="#setTransactionToExpense" styleClass="btn" text="Expense" HBox.hgrow="ALWAYS">
+                                       <graphic>
+                                          <Icon content="ARROW_UPWARD" styleClass="expenseBtn" stylesheets="@stylesheet.css" />
+                                       </graphic>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER" maxHeight="80.0" prefWidth="600.0" spacing="30.0" VBox.vgrow="ALWAYS">
+                                 <children>
+                                    <ChoiceBox fx:id="accountSelect" maxHeight="40.0" maxWidth="250.0" styleClass="choicebox" HBox.hgrow="ALWAYS" />
+                                    <DatePicker fx:id="datePicker" maxHeight="40.0" maxWidth="250.0" onAction="#selectDate" promptText="Input Date" styleClass="datepicker" HBox.hgrow="ALWAYS" />
+                                 </children>
+                                 <padding>
+                                    <Insets left="30.0" right="30.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="80.0" prefWidth="600.0" spacing="30.0" VBox.vgrow="ALWAYS">
+                                 <padding>
+                                    <Insets left="30.0" right="30.0" />
+                                 </padding>
+                                 <children>
+                                    <VBox alignment="CENTER_LEFT" maxWidth="250.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <TextField fx:id="amountField" maxHeight="40.0" maxWidth="250.0" onAction="#setAmount" promptText="Amount" styleClass="input" VBox.vgrow="ALWAYS" />
+                                          <Text fx:id="amountErrorField" fill="RED" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" VBox.vgrow="ALWAYS">
+                                             <font>
+                                                <Font name="Roboto" size="12.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </VBox>
+                                    <VBox alignment="CENTER_LEFT" layoutX="40.0" layoutY="10.0" maxWidth="250.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <TextField fx:id="descriptionField" maxHeight="40.0" maxWidth="250.0" onAction="#setDescription" promptText="Description" styleClass="input" VBox.vgrow="ALWAYS" />
+                                          <Text fx:id="descriptionErrorField" fill="RED" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" VBox.vgrow="ALWAYS">
+                                             <font>
+                                                <Font name="Roboto" size="12.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER" layoutX="10.0" layoutY="182.0" maxHeight="80.0" prefWidth="600.0" spacing="30.0" VBox.vgrow="ALWAYS">
+                                 <padding>
+                                    <Insets left="30.0" right="30.0" />
+                                 </padding>
+                                 <children>
+                                    <VBox alignment="CENTER_LEFT" layoutX="40.0" layoutY="10.0" maxWidth="250.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <Button fx:id="saveExpenseBtn" maxHeight="40.0" maxWidth="250.0" mnemonicParsing="false" onAction="#saveExpenses" styleClass="btn" text="Save" VBox.vgrow="ALWAYS" />
+                                          <Text fill="RED" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0">
+                                             <font>
+                                                <Font name="Roboto" size="12.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab fx:id="activitiesTab" text="Activities">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="207.0" prefWidth="336.0">
+                     <children>
+                        <VBox alignment="CENTER" prefHeight="344.0" prefWidth="600.0">
+                           <children>
+                              <HBox alignment="CENTER" layoutX="10.0" layoutY="62.0" maxHeight="80.0" prefWidth="600.0" spacing="30.0" VBox.vgrow="ALWAYS">
+                                 <padding>
+                                    <Insets left="30.0" right="30.0" />
+                                 </padding>
+                                 <children>
+                                    <Button fx:id="incomeBtn1" maxWidth="250.0" mnemonicParsing="false" onAction="#setTransactionToIncome" styleClass="incomeBtn" text="Income" HBox.hgrow="ALWAYS">
+                                       <graphic>
+                                          <Icon content="ARROW_DOWNWARD" />
+                                       </graphic>
+                                    </Button>
+                                    <Button fx:id="expenseBtn1" layoutX="271.0" layoutY="10.0" maxWidth="250.0" mnemonicParsing="false" onAction="#setTransactionToExpense" styleClass="expenseBtn" text="Expense" HBox.hgrow="ALWAYS">
+                                       <graphic>
+                                          <Icon content="ARROW_UPWARD" styleClass="expenseBtn" stylesheets="@stylesheet.css" />
+                                       </graphic>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER" maxHeight="80.0" prefWidth="600.0" spacing="30.0" VBox.vgrow="ALWAYS">
+                                 <children>
+                                    <ChoiceBox fx:id="accountSelect1" maxHeight="40.0" maxWidth="250.0" styleClass="checkBox" HBox.hgrow="ALWAYS" />
+                                    <DatePicker fx:id="datePicker1" maxHeight="40.0" maxWidth="250.0" onAction="#selectDate" promptText="Input Date" styleClass="inputDate" HBox.hgrow="ALWAYS" />
+                                 </children>
+                                 <padding>
+                                    <Insets left="30.0" right="30.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="80.0" prefWidth="600.0" spacing="30.0" VBox.vgrow="ALWAYS">
+                                 <padding>
+                                    <Insets left="30.0" right="30.0" />
+                                 </padding>
+                                 <children>
+                                    <VBox alignment="CENTER_LEFT" maxWidth="250.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <TextField fx:id="amountField1" maxHeight="40.0" maxWidth="250.0" onAction="#setAmount" promptText="Amount" styleClass="inputField" VBox.vgrow="ALWAYS" />
+                                          <Text fx:id="amountErrorField1" fill="RED" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" VBox.vgrow="ALWAYS">
+                                             <font>
+                                                <Font name="Roboto" size="12.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </VBox>
+                                    <VBox fx:id="descriptionField1" alignment="CENTER_LEFT" layoutX="40.0" layoutY="10.0" maxWidth="250.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <TextField fx:id="DescriptionField1" maxHeight="40.0" maxWidth="250.0" onAction="#setDescription" promptText="Description" styleClass="inputField" VBox.vgrow="ALWAYS" />
+                                          <Text fx:id="descriptionErrorField1" fill="RED" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" VBox.vgrow="ALWAYS">
+                                             <font>
+                                                <Font name="Roboto" size="12.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER" layoutX="10.0" layoutY="182.0" maxHeight="80.0" prefWidth="600.0" spacing="30.0" VBox.vgrow="ALWAYS">
+                                 <padding>
+                                    <Insets left="30.0" right="30.0" />
+                                 </padding>
+                                 <children>
+                                    <VBox alignment="CENTER_LEFT" layoutX="40.0" layoutY="10.0" maxWidth="250.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <Button fx:id="saveExpenseBtn1" maxHeight="40.0" maxWidth="250.0" mnemonicParsing="false" onAction="#saveExpenses" styleClass="btn" text="Button" VBox.vgrow="ALWAYS" />
+                                          <Text fill="RED" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0">
+                                             <font>
+                                                <Font name="Roboto" size="12.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </AnchorPane>
+               </content>
+               <content>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <VBox alignment="CENTER" prefHeight="344.0" prefWidth="600.0">
+                           <children>
+                              <HBox alignment="CENTER" maxHeight="80.0" prefWidth="600.0" spacing="30.0" VBox.vgrow="ALWAYS">
+                                 <padding>
+                                    <Insets left="30.0" right="30.0" />
+                                 </padding>
+                                 <children>
+                                    <ChoiceBox fx:id="activitySelect" maxHeight="40.0" maxWidth="250.0" styleClass="choiceBox" HBox.hgrow="ALWAYS" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER" layoutX="10.0" layoutY="102.0" maxHeight="80.0" prefWidth="600.0" spacing="30.0" VBox.vgrow="ALWAYS">
+                                 <padding>
+                                    <Insets left="30.0" right="30.0" />
+                                 </padding>
+                                 <children>
+                                    <VBox alignment="CENTER_LEFT" layoutX="40.0" layoutY="10.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <DatePicker fx:id="startTime" maxHeight="40.0" maxWidth="250.0" onAction="#setStartTime" promptText="Start Tiime" styleClass="datePicker" VBox.vgrow="ALWAYS" />
+                                          <Text fx:id="startTimeErr" fill="RED" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" VBox.vgrow="ALWAYS">
+                                             <font>
+                                                <Font name="Roboto" size="12.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </VBox>
+                                    <VBox alignment="CENTER_LEFT" layoutX="40.0" layoutY="10.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <DatePicker fx:id="endTime" maxHeight="40.0" maxWidth="250.0" onAction="#setEndTime" promptText="End Time" styleClass="datePicker" VBox.vgrow="ALWAYS" />
+                                          <Text fx:id="endTimeErr" fill="RED" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" VBox.vgrow="ALWAYS">
+                                             <font>
+                                                <Font name="Roboto" size="12.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="80.0" prefWidth="600.0" spacing="30.0" VBox.vgrow="ALWAYS">
+                                 <padding>
+                                    <Insets left="30.0" right="30.0" />
+                                 </padding>
+                                 <children>
+                                    <VBox alignment="CENTER_LEFT" layoutX="40.0" layoutY="10.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <TextField fx:id="activityDescription" maxHeight="40.0" onAction="#setDescription" promptText="Description" styleClass="input" VBox.vgrow="ALWAYS" />
+                                          <Text fx:id="activityDescriptionErr" fill="RED" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" VBox.vgrow="ALWAYS">
+                                             <font>
+                                                <Font name="Roboto" size="12.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER" layoutX="10.0" layoutY="182.0" maxHeight="80.0" prefWidth="600.0" spacing="30.0" VBox.vgrow="ALWAYS">
+                                 <padding>
+                                    <Insets left="30.0" right="30.0" />
+                                 </padding>
+                                 <children>
+                                    <VBox alignment="CENTER_LEFT" layoutX="40.0" layoutY="10.0" maxWidth="250.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <Button fx:id="saveActivityBtn" maxHeight="40.0" maxWidth="250.0" mnemonicParsing="false" onAction="#saveActivity" styleClass="btn" text="Save" VBox.vgrow="ALWAYS" />
+                                          <Text fill="RED" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0">
+                                             <font>
+                                                <Font name="Roboto" size="12.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </AnchorPane>
+               </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+   </children>
 </AnchorPane>

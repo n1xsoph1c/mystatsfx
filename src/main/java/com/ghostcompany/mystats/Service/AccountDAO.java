@@ -6,7 +6,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AcconutDAO {
+public class AccountDAO {
     public int addAccount(Account account) throws SQLException {
         String query = "INSERT INTO accounts (name, group_name) VALUES (?, ?)";
         try (Connection conn = Database.getConnection();
@@ -47,7 +47,7 @@ public class AcconutDAO {
     }
 
     public List<Account> getAllAccounts() throws SQLException {
-        String query = "SELECT * FROM account";
+        String query = "SELECT * FROM accounts";
         List<Account> accoutns = new ArrayList<>();
         try (Connection conn = Database.getConnection();
              Statement stmt = conn.createStatement();

@@ -14,6 +14,11 @@ public class NavBarController {
     }
 
     @FXML
+    private void showAddEntry() throws IOException {
+        sceneController.switchMainScene("/com/ghostcompany/mystats/entry.fxml");
+    }
+
+    @FXML
     private void showLog() throws IOException {
         sceneController.switchMainScene("/com/ghostcompany/mystats/log.fxml");
     }
@@ -39,7 +44,7 @@ public class NavBarController {
     }
 
     @FXML
-    private void logout() {
+    private void logout() throws IOException {
         sceneController.switchSceneToLogin();
     }
 }

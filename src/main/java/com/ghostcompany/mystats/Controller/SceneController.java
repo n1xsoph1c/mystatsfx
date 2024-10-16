@@ -30,10 +30,9 @@ public class SceneController implements Initializable {
             NavBarController navBarController = navLoader.getController();
             navBarController.setSceneController(this);
 
-            // Set initial content in mainScene (e.g., log.fxml)
-            switchMainScene("/com/ghostcompany/mystats/log.fxml");
+            // Set initial content in mainScene (e.g., entry.fxml)
+            switchMainScene("/com/ghostcompany/mystats/entry.fxml");
         } catch (IOException e) {
-            e.printStackTrace();
             throw new RuntimeException("Error loading FXML resources", e);
         }
     }
@@ -46,14 +45,14 @@ public class SceneController implements Initializable {
             FXMLLoader loader = loadFXML(fxmlPath);
             mainScene.setRoot(loader.getRoot());
         } catch (IOException e) {
-            throw new IOException("FXML File not found: " + fxmlPath);
+            e.printStackTrace();
         }
     }
 
     /**
      * Switches the entire scene to login.fxml (for logout).
      */
-    public void switchSceneToLogin() {
+    public void switchSceneToLogin() throws IOException {
         try {
             FXMLLoader loader = loadFXML("/com/ghostcompany/mystats/login.fxml");
             Stage stage = (Stage) mainScene.getScene().getWindow();
@@ -61,6 +60,7 @@ public class SceneController implements Initializable {
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
+            throw new IOException("FXML File not found: /com/ghostcompany/mystats/login.fxml");
         }
     }
 

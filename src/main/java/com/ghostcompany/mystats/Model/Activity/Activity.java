@@ -1,28 +1,29 @@
 package com.ghostcompany.mystats.Model.Activity;
 
-import java.util.Date;
-
 public class Activity {
     private int id;
     private String name;
-    private String description;
-    private Date timeSpent;
+    private int groupId;
 
-    public Activity(int id, String name, String description, Date timeSpent) {
+    public Activity(int id, String name, int groupId) {
         this.id = id;
         this.name = name;
-        this.description = description;
-        this.timeSpent = timeSpent;
+        this.groupId = groupId;
     }
 
-    public int getId() { return id; }
     public void setId(int id) { this.id = id; }
-    public String getName() { return name; }
     public void setName(String name) { this.name = name; }
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
-    public Date getTimeSpent() { return timeSpent; }
-    public void setTimeSpent(Date timeSpent) { this.timeSpent = timeSpent; }
+    public void setGroupId(int groupId) { this.groupId = groupId; }
 
+    public int getId() {
+        return id;
+    }
 
+    public String getName() {
+        return name;
+    }
+
+    public int getGroupId() {
+        return groupId;
+    }
 }

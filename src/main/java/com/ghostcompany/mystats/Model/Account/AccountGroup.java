@@ -1,37 +1,29 @@
 package com.ghostcompany.mystats.Model.Account;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AccountGroup {
     private int id;
     private String name;
-    private String description;
-    private List<Account> accounts = new ArrayList<Account>();
+    private Map<String, Account> accounts;
 
     public AccountGroup(int id, String name, String description) {
         this.id = id;
         this.name = name;
-        this.description = description;
+        this.accounts = new HashMap<>();
     }
 
-    public int getId() { return id; }
-    public String getName() { return name; }
-    public String getDescription() { return description; }
+    public void addAccount(Account account) { accounts.put(account.getAccountName(), account); }
 
-    public void setId(int id) { this.id = id; }
-    public void setName(String name) { this.name = name; }
-    public void setDescription(String description) { this.description = description; }
-
-    public List<Account> getAccounts() { return accounts; }
-    public void setAccounts(List<Account> accounts) { this.accounts = accounts; }
-
-    public void addAccount(Account account) {
-        accounts.add(account);
+    public double getGroupTotal() {
+        return accounts.values().stream().mapToDouble(Account::getTotalAmount).sum();
     }
 
     public void removeAccount(Account account) {
-        accounts.remove(account);
+        accounts.remove(account.getAccountName());
     }
 
     public void createAccountGroup() {
@@ -46,22 +38,5 @@ public class AccountGroup {
         // Update Account Group on sql
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("AccountGroup { ");
-        sb.append("id: ").append(id);
-        sb.append(", name: ").append(name);
-        sb.append(", description: ").append(description);
-        sb.append(", accounts: [");
-
-        for (int i = 0; i < accounts.size(); i++) {
-            sb.append(accounts.get(i).toString());
-            if (i < accounts.size() - 1) sb.append(", ");
-        }
-
-        sb.append("] }");
-        return sb.toString();
-    }
 
 }

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.SubScene?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Region?>
+
+<AnchorPane prefHeight="400.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ghostcompany.mystats.Controller.SceneController">
+   <children>
+      <SubScene fx:id="navBarScene" height="400.0" width="110.0">
+        <root>
+          <Region />
+        </root>
+      </SubScene>
+      <SubScene fx:id="mainScene" height="400.0" layoutX="110.0" layoutY="-7.0" width="590.0">
+        <root>
+          <Region />
+        </root>
+      </SubScene>
+   </children>
+</AnchorPane>

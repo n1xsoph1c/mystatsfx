@@ -1,9 +1,15 @@
 package com.ghostcompany.mystats.Model.Activity;
 
+import com.ghostcompany.mystats.Service.ActivityEntryDAO;
+
+import java.sql.SQLException;
+import java.util.List;
+
 public class Activity {
     private int id;
     private String name;
     private int groupId;
+    private ActivityEntryDAO activityEntryDAO = new ActivityEntryDAO();
 
     public Activity(int id, String name, int groupId) {
         this.id = id;
@@ -26,4 +32,9 @@ public class Activity {
     public int getGroupId() {
         return groupId;
     }
+
+    public List<ActivityEntry> getEntries() throws SQLException {
+        return activityEntryDAO.getAllEntries(this.getId());
+    }
+
 }

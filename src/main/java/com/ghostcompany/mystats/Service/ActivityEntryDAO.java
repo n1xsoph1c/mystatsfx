@@ -43,11 +43,11 @@ public class ActivityEntryDAO {
     }
 
     // Fetch all activity entries from the database.
-    public List<ActivityEntry> getAllEntries() throws SQLException {
+    public List<ActivityEntry> getAllEntries(int activity_id) throws SQLException {
         List<ActivityEntry> entries = new ArrayList<>();
 
         try (Connection conn = Database.getConnection();
-             PreparedStatement ps = conn.prepareStatement(SELECT_ALL_SQL);
+             PreparedStatement ps = conn.prepareStatement(SELECT_ALL_SQL + " WHERE activity_id = " + activity_id);
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {

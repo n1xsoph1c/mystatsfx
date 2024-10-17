@@ -1,5 +1,9 @@
 package com.ghostcompany.mystats.Model.Account;
 
+import com.ghostcompany.mystats.Service.AccountDAO;
+import com.ghostcompany.mystats.Service.TransactionDAO;
+
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +13,7 @@ public class Account {
     private String groupName;
     private List<Transaction> transactions;
 
+    private TransactionDAO transactionDAO = new TransactionDAO();
 
     public Account(int id, String name, String groupName) {
         this.id = id;
@@ -54,8 +59,8 @@ public class Account {
         return totalAmount;
     }
 
-    public List<Transaction> getTransactions() {
-        return transactions;
+    public List<Transaction> getTransactions() throws SQLException {
+        return transactionDAO.getTransactions(getId());
     }
 
 }

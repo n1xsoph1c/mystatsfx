@@ -7,7 +7,7 @@
 
 <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ghostcompany.mystats.Controller.LogController">
   <tabs>
-    <Tab text="Expenses">
+    <Tab onSelectionChanged="#populateExpenseView" text="Expenses">
       <content>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
@@ -15,7 +15,7 @@
                </children></AnchorPane>
       </content>
     </Tab>
-    <Tab text="Activites">
+    <Tab onSelectionChanged="#populateActivityView" text="Activites">
       <content>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>

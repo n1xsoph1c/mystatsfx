@@ -1,45 +1,39 @@
 package com.ghostcompany.mystats.Model.Account;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public class Transaction {
-    private LocalDate date;
+    private int transactionId;
+    private int accountId;
     private double amount;
     private String description;
+    private LocalDate date;
     private ETransactionType transactionType;
-    private int account_id;
-    private int transaction_id;
 
-    public Transaction(int transaction_id,int  account_id, double amount, String description, LocalDate date, ETransactionType transactionType) {
-        this.transaction_id = transaction_id;
-        this.account_id = account_id;
-        this.date = date;
+    public Transaction(int transactionId, int accountId, double amount,
+                       String description, LocalDate date, ETransactionType transactionType) {
+        this.transactionId = transactionId;
+        this.accountId = accountId;
         this.amount = amount;
         this.description = description;
+        this.date = date;
         this.transactionType = transactionType;
     }
 
+    public int getTransactionId() { return transactionId; }
+    public int getAccountId() { return accountId; }
     public double getAmount() {
-        return transactionType == ETransactionType.WITHDRAWAL ? -amount : amount;
+        return amount;
     }
-
     public String getDescription() { return description; }
-    public int getAccount_id() { return account_id; }
-    public int getTransaction_id() { return transaction_id; }
+    public LocalDate getDate() { return date; }
+    public ETransactionType getType() { return transactionType; }
+
+    public void setTransactionId(int transactionId) { this.transactionId = transactionId; }
+    public void setAccountId(int accountId) { this.accountId = accountId; }
     public void setAmount(double amount) { this.amount = amount; }
     public void setDescription(String description) { this.description = description; }
-    public void setAccount_id(int account_id) { this.account_id = account_id; }
-    public void setTransaction_id(int transaction_id) { this.transaction_id = transaction_id; }
-    public void setTransactionType(ETransactionType transactionType) { this.transactionType = transactionType; }
+    public void setTransactionType(ETransactionType type) { this.transactionType = type; }
 
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public ETransactionType getType() {
-        return transactionType;
-    }
-
-
+    public double getBalance() { return this.transactionType == ETransactionType.DEPOSIT ? this.amount : this.amount * -1; }
 }

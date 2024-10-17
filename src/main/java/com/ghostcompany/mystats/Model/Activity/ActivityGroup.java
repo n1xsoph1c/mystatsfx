@@ -1,31 +1,29 @@
 package com.ghostcompany.mystats.Model.Activity;
 
-
 import java.util.HashMap;
 import java.util.Map;
 
 public class ActivityGroup {
     private int id;
     private String name;
-    private Map<String, Activity> activities;
+    private Map<String, Activity> activities = new HashMap<>();
 
-    public ActivityGroup (int id, String name) {
+    public ActivityGroup(int id, String name) {
         this.id = id;
         this.name = name;
-        this.activities = new HashMap<String, Activity>();
     }
 
-    public int getId() {
-        return id;
-    }
+    public int getId() { return id; }
+    public String getName() { return name; }
 
     public void setId(int id) { this.id = id; }
+    public void setName(String name) { this.name = name; }
 
-    public String getName() {
-        return name;
+    public void addActivity(Activity activity) {
+        activities.put(activity.getName(), activity);
     }
 
-    public void addActivity(Activity activity) { this.activities.put(activity.getName(), activity); }
-    public Map<String, Activity> getActivities() { return activities; }
-
+    public Map<String, Activity> getActivities() {
+        return activities;
+    }
 }

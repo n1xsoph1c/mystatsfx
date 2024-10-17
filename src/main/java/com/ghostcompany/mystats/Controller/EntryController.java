@@ -58,6 +58,8 @@ public class EntryController implements Initializable {
     private Activity selectedActivity;
     private ActivityEntry selectedActivityEntry;
 
+    private boolean isIncome = false;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
@@ -79,9 +81,27 @@ public class EntryController implements Initializable {
             accountSelect.setOnAction(this::setAccount);
             activitySelect.setOnAction(this::setActivity);
 
-            selectedActivity = activities.getFirst();
-            selectedAccount = accounts.getFirst();  // Default to the first account
-            initializeTransaction();
+            // Check for empty lists
+            if (!activities.isEmpty()) {
+                selectedActivity = activities.get(0);  // Use index
+            } else {
+                // Handle the case where activities are empty
+                activityDescriptionErr.setText("No activities available.");
+            }
+
+            if (!accounts.isEmpty()) {
+                selectedAccount = accounts.get(0);  // Use index
+                initializeTransaction();
+            } else {
+                // Handle the case where accounts are empty
+                descriptionErrorField.setText("No accounts available.");
+            }
+
+            expenseBtn.setStyle("-fx-background-color: red; -fx-text-fill: white;");
+            incomeBtn.setStyle("-fx-background-color: black; -fx-text-fill: white;");
+            selectedTransaction.setTransactionType(ETransactionType.WITHDRAWAL);
+            isIncome = false;
+
         } catch (SQLException e) {
             descriptionErrorField.setText("Error loading accounts or activities.");
             e.printStackTrace();
@@ -141,19 +161,17 @@ public class EntryController implements Initializable {
     }
 
     public void setTransactionToIncome(ActionEvent event) {
-        if (selectedTransaction.getType() != ETransactionType.DEPOSIT) {
             incomeBtn.setStyle("-fx-background-color: DeepSkyBlue; -fx-text-fill: white;");
             expenseBtn.setStyle("-fx-background-color: black; -fx-text-fill: white;");
             selectedTransaction.setTransactionType(ETransactionType.DEPOSIT);
-        }
+            isIncome = true;
     }
 
     public void setTransactionToExpense(ActionEvent event) {
-        if (selectedTransaction.getType() != ETransactionType.WITHDRAWAL) {
             expenseBtn.setStyle("-fx-background-color: red; -fx-text-fill: white;");
             incomeBtn.setStyle("-fx-background-color: black; -fx-text-fill: white;");
             selectedTransaction.setTransactionType(ETransactionType.WITHDRAWAL);
-        }
+            isIncome = false;
     }
 
     public void saveExpenses(ActionEvent event) {
@@ -162,6 +180,14 @@ public class EntryController implements Initializable {
                 descriptionErrorField.setText("Description cannot be empty.");
                 return;
             }
+
+            if (selectedTransaction.getAmount() <= 0) {
+                amountErrorField.setText("Amount cannot be less than 0.");
+                return;
+            }
+
+            if (isIncome) selectedTransaction.setTransactionType(ETransactionType.DEPOSIT);
+            else selectedTransaction.setTransactionType(ETransactionType.WITHDRAWAL);
 
             transactionHandler.addTransaction(selectedTransaction);
             descriptionErrorField.setText("Transaction saved successfully!");

@@ -7,10 +7,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AccountDAO {
+
+    private static final String INSERT_SQL = "INSERT INTO accounts (name, group_name) VALUES (?, ?)";
+    private static final String SELECT_ALL_SQL = "SELECT * FROM accounts";
+    private static final String UPDATE_SQL = "UPDATE accounts SET name = ?, group_name = ? WHERE id = ?";
+    private static final String DELETE_SQL = "DELETE FROM accounts WHERE id = ?";
+
+    // Add a new account and return its ID.
     public int addAccount(Account account) throws SQLException {
-        String query = "INSERT INTO accounts (name, group_name) VALUES (?, ?)";
         try (Connection conn = Database.getConnection();
-        PreparedStatement ps = conn.prepareStatement(query)) {
+             PreparedStatement ps = conn.prepareStatement(INSERT_SQL, Statement.RETURN_GENERATED_KEYS)) {
+
             ps.setString(1, account.getAccountName());
             ps.setString(2, account.getGroupName());
             ps.executeUpdate();
@@ -19,67 +26,51 @@ public class AccountDAO {
                 if (rs.next()) {
                     account.setId(rs.getInt(1));
                     return account.getId();
-                } else {
-                    throw new SQLException("Creating accounts failed, no ID Obtained");
                 }
             }
         }
+        throw new SQLException("Failed to insert account.");
     }
 
-    public void deleteAccount(String name) throws SQLException {
-        String query = "DELETE FROM accounts WHERE name = ?";
-        try (Connection conn = Database.getConnection();
-        PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setString(1, name);
-            ps.executeUpdate();
-        }
-    }
-
-    public void updateAccount(String name, String groupName) throws SQLException {
-        String query = "UPDATE accounts SET name = ?, group_name = ? WHERE name = ?";
-        try (Connection conn = Database.getConnection();
-        PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setString(1, name);
-            ps.setString(2, groupName);
-            ps.setString(3, name);
-            ps.executeUpdate();
-        }
-    }
-
+    // Retrieve all accounts from the database.
     public List<Account> getAllAccounts() throws SQLException {
-        String query = "SELECT * FROM accounts";
-        List<Account> accoutns = new ArrayList<>();
+        List<Account> accounts = new ArrayList<>();
+
         try (Connection conn = Database.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(query)
-        ) {
+             PreparedStatement ps = conn.prepareStatement(SELECT_ALL_SQL);
+             ResultSet rs = ps.executeQuery()) {
+
             while (rs.next()) {
-                Account accounts = new Account(
+                Account account = new Account(
                         rs.getInt("id"),
                         rs.getString("name"),
                         rs.getString("group_name")
                 );
-                accoutns.add(accounts);
+                accounts.add(account);
             }
         }
-        return accoutns;
+        return accounts;
     }
 
-    public double[] getTotalBalanceAndLiabilities() throws SQLException {
-        String query = "SELECT account_id, SUM(amount) AS total_balance FROM transactions GROUP BY account_id";
-        double totalAssessts = 0, totalLiabilities = 0;
+    // Update an account by ID.
+    public boolean updateAccount(Account account) throws SQLException {
+        try (Connection conn = Database.getConnection();
+             PreparedStatement ps = conn.prepareStatement(UPDATE_SQL)) {
 
-        try (Connection conn = Database.getConnection(); PreparedStatement ps = conn.prepareStatement(query); ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                double balance = rs.getDouble("total_balance");
-                if (balance > 0) {
-                    totalAssessts += balance;
-                } else {
-                    totalLiabilities += balance;
-                }
-            }
+            ps.setString(1, account.getAccountName());
+            ps.setString(2, account.getGroupName());
+            ps.setInt(3, account.getId());
+            return ps.executeUpdate() > 0;
         }
+    }
 
-        return new double[]{totalAssessts, totalLiabilities};
+    // Delete an account by ID.
+    public boolean deleteAccount(int accountId) throws SQLException {
+        try (Connection conn = Database.getConnection();
+             PreparedStatement ps = conn.prepareStatement(DELETE_SQL)) {
+
+            ps.setInt(1, accountId);
+            return ps.executeUpdate() > 0;
+        }
     }
 }

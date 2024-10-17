@@ -1,6 +1,7 @@
 package com.ghostcompany.mystats.Service;
 
 import com.ghostcompany.mystats.Model.Activity.Activity;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.List;
 public class ActivityDAO {
 
     // SQL Queries
-    private static final String INSERT_SQL = "INSERT INTO activities (name, group_id) VALUES (?, ?)";
+    private static final String INSERT_SQL = "INSERT INTO activities (name, group_name) VALUES (?, ?)";
     private static final String SELECT_ALL_SQL = "SELECT * FROM activities";
 
     // Add a new activity and return the generated ID.
@@ -20,7 +21,7 @@ public class ActivityDAO {
 
             // Set parameters
             ps.setString(1, activity.getName());
-            ps.setInt(2, activity.getGroupId());
+            ps.setString(2, activity.getGroupName()); // Updated to match the new schema
 
             // Execute the query
             int affectedRows = ps.executeUpdate();
@@ -51,7 +52,7 @@ public class ActivityDAO {
                 Activity activity = new Activity(
                         rs.getInt("id"),
                         rs.getString("name"),
-                        rs.getInt("group_id")
+                        rs.getString("group_name") // Updated to match the new schema
                 );
                 activities.add(activity);
             }
@@ -64,8 +65,8 @@ public class ActivityDAO {
         if (activity.getName() == null || activity.getName().isEmpty()) {
             throw new IllegalArgumentException("Activity name cannot be null or empty.");
         }
-        if (activity.getGroupId() <= 0) {
-            throw new IllegalArgumentException("Group ID must be a positive integer.");
+        if (activity.getGroupName() == null || activity.getGroupName().isEmpty()) {
+            throw new IllegalArgumentException("Group name cannot be null or empty.");
         }
     }
 }

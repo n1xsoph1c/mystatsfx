@@ -1,8 +1,6 @@
 package com.ghostcompany.mystats.Model.Account;
 
-import com.ghostcompany.mystats.Service.AccountDAO;
 import com.ghostcompany.mystats.Service.TransactionDAO;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,56 +9,34 @@ public class Account {
     private int id;
     private String name;
     private String groupName;
-    private List<Transaction> transactions;
-
-    private TransactionDAO transactionDAO = new TransactionDAO();
+    private final TransactionDAO transactionDAO = new TransactionDAO();
+    private List<Transaction> transactions = new ArrayList<>();
 
     public Account(int id, String name, String groupName) {
         this.id = id;
-        this.groupName = groupName;
         this.name = name;
-        this.transactions = new ArrayList<>();
+        this.groupName = groupName;
     }
 
+    public Account() {}
 
     public int getId() { return id; }
+    public String getAccountName() { return name; }
+    public String getGroupName() { return groupName; }
+
     public void setId(int id) { this.id = id; }
+    public void setAccountName(String name) { this.name = name; }
+    public void setGroupName(String groupName) { this.groupName = groupName; }
 
-    public String getAccountName() {
-        return name;
-    }
-
-    public String getGroupName() {
-        return groupName;
-    }
-
-    public void setAccountName(String accountName) {
-        this.name = accountName;
-    }
-
-    public void setGroupName(String groupName) {
-        this.groupName = groupName;
-    }
-
-    public void setTransactions(List<Transaction> transactions) {
-        this.transactions = transactions;
+    public List<Transaction> getTransactions() throws SQLException {
+        return transactionDAO.getTransactions(this.id);
     }
 
     public void addTransaction(Transaction transaction) {
         transactions.add(transaction);
     }
 
-    public double getTotalAmount() {
-        double totalAmount = 0;
-        for (Transaction transaction : transactions) {
-            totalAmount += transaction.getAmount();
-        }
-
-        return totalAmount;
+    public double getTotalAmount() throws SQLException {
+        return this.getTransactions().stream().mapToDouble(Transaction::getBalance).sum();
     }
-
-    public List<Transaction> getTransactions() throws SQLException {
-        return transactionDAO.getTransactions(getId());
-    }
-
 }

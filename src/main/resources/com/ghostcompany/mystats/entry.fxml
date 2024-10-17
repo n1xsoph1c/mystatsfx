@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.gluonhq.charm.glisten.control.Icon?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
@@ -14,7 +13,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ghostcompany.mystats.Controller.EntryController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ghostcompany.mystats.Controller.EntryController">
    <children>
       <TabPane prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.leftAnchor="0.0">
         <tabs>
@@ -29,21 +28,21 @@
                                     <Insets left="30.0" right="30.0" />
                                  </padding>
                                  <children>
-                                    <Button fx:id="incomeBtn" maxWidth="250.0" mnemonicParsing="false" onAction="#setTransactionToIncome" styleClass="btn" text="Income" HBox.hgrow="ALWAYS">
-                                       <graphic>
-                                          <Icon content="ARROW_DOWNWARD" />
-                                       </graphic>
+                                    <Button fx:id="incomeBtn" maxWidth="250.0" mnemonicParsing="false" onAction="#setTransactionToIncome" prefHeight="38.0" prefWidth="250.0" style="-fx-background-color: deepskyblue;" styleClass="btn" text="Income" textFill="WHITE" HBox.hgrow="ALWAYS">
+                                       <font>
+                                          <Font name="Roboto Bold" size="14.0" />
+                                       </font>
                                     </Button>
-                                    <Button fx:id="expenseBtn" layoutX="271.0" layoutY="10.0" maxWidth="250.0" mnemonicParsing="false" onAction="#setTransactionToExpense" styleClass="btn" text="Expense" HBox.hgrow="ALWAYS">
-                                       <graphic>
-                                          <Icon content="ARROW_UPWARD" styleClass="expenseBtn" stylesheets="@stylesheet.css" />
-                                       </graphic>
+                                    <Button fx:id="expenseBtn" layoutX="271.0" layoutY="10.0" maxWidth="250.0" mnemonicParsing="false" onAction="#setTransactionToExpense" prefHeight="38.0" prefWidth="250.0" style="-fx-background-color: red;" styleClass="btn" text="Expense" textFill="WHITE" HBox.hgrow="ALWAYS">
+                                       <font>
+                                          <Font name="Roboto Bold" size="14.0" />
+                                       </font>
                                     </Button>
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER" maxHeight="80.0" prefWidth="600.0" spacing="30.0" VBox.vgrow="ALWAYS">
                                  <children>
-                                    <ChoiceBox fx:id="accountSelect" maxHeight="40.0" maxWidth="250.0" styleClass="choicebox" HBox.hgrow="ALWAYS" />
+                                    <ChoiceBox fx:id="accountSelect" maxHeight="40.0" maxWidth="250.0" prefHeight="40.0" prefWidth="250.0" styleClass="choicebox" HBox.hgrow="ALWAYS" />
                                     <DatePicker fx:id="datePicker" maxHeight="40.0" maxWidth="250.0" onAction="#selectDate" promptText="Input Date" styleClass="datepicker" HBox.hgrow="ALWAYS" />
                                  </children>
                                  <padding>
@@ -112,14 +111,9 @@
                                  </padding>
                                  <children>
                                     <Button fx:id="incomeBtn1" maxWidth="250.0" mnemonicParsing="false" onAction="#setTransactionToIncome" styleClass="incomeBtn" text="Income" HBox.hgrow="ALWAYS">
-                                       <graphic>
-                                          <Icon content="ARROW_DOWNWARD" />
-                                       </graphic>
+
                                     </Button>
                                     <Button fx:id="expenseBtn1" layoutX="271.0" layoutY="10.0" maxWidth="250.0" mnemonicParsing="false" onAction="#setTransactionToExpense" styleClass="expenseBtn" text="Expense" HBox.hgrow="ALWAYS">
-                                       <graphic>
-                                          <Icon content="ARROW_UPWARD" styleClass="expenseBtn" stylesheets="@stylesheet.css" />
-                                       </graphic>
                                     </Button>
                                  </children>
                               </HBox>
@@ -191,7 +185,7 @@
                                     <Insets left="30.0" right="30.0" />
                                  </padding>
                                  <children>
-                                    <ChoiceBox fx:id="activitySelect" maxHeight="40.0" maxWidth="250.0" styleClass="choiceBox" HBox.hgrow="ALWAYS" />
+                                    <ChoiceBox fx:id="activitySelect" maxHeight="40.0" maxWidth="250.0" prefHeight="40.0" prefWidth="250.0" styleClass="choicebox" HBox.hgrow="ALWAYS" />
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER" layoutX="10.0" layoutY="102.0" maxHeight="80.0" prefWidth="600.0" spacing="30.0" VBox.vgrow="ALWAYS">
@@ -201,7 +195,7 @@
                                  <children>
                                     <VBox alignment="CENTER_LEFT" layoutX="40.0" layoutY="10.0" HBox.hgrow="ALWAYS">
                                        <children>
-                                          <DatePicker fx:id="startTime" maxHeight="40.0" maxWidth="250.0" onAction="#setStartTime" promptText="Start Tiime" styleClass="datePicker" VBox.vgrow="ALWAYS" />
+                                          <DatePicker fx:id="startTime" maxHeight="40.0" maxWidth="250.0" onAction="#setStartTime" promptText="Start Tiime" styleClass="datepicker" VBox.vgrow="ALWAYS" />
                                           <Text fx:id="startTimeErr" fill="RED" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" VBox.vgrow="ALWAYS">
                                              <font>
                                                 <Font name="Roboto" size="12.0" />
@@ -211,7 +205,7 @@
                                     </VBox>
                                     <VBox alignment="CENTER_LEFT" layoutX="40.0" layoutY="10.0" HBox.hgrow="ALWAYS">
                                        <children>
-                                          <DatePicker fx:id="endTime" maxHeight="40.0" maxWidth="250.0" onAction="#setEndTime" promptText="End Time" styleClass="datePicker" VBox.vgrow="ALWAYS" />
+                                          <DatePicker fx:id="endTime" maxHeight="40.0" maxWidth="250.0" onAction="#setEndTime" promptText="End Time" styleClass="datepicker" VBox.vgrow="ALWAYS" />
                                           <Text fx:id="endTimeErr" fill="RED" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" VBox.vgrow="ALWAYS">
                                              <font>
                                                 <Font name="Roboto" size="12.0" />
@@ -228,7 +222,7 @@
                                  <children>
                                     <VBox alignment="CENTER_LEFT" layoutX="40.0" layoutY="10.0" HBox.hgrow="ALWAYS">
                                        <children>
-                                          <TextField fx:id="activityDescription" maxHeight="40.0" onAction="#setDescription" promptText="Description" styleClass="input" VBox.vgrow="ALWAYS" />
+                                          <TextField fx:id="activityDescription" maxHeight="40.0" onAction="#setActivityDescription" promptText="Description" styleClass="input" VBox.vgrow="ALWAYS" />
                                           <Text fx:id="activityDescriptionErr" fill="RED" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" VBox.vgrow="ALWAYS">
                                              <font>
                                                 <Font name="Roboto" size="12.0" />

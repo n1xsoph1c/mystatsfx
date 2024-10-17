@@ -4,10 +4,9 @@ import com.ghostcompany.mystats.Model.Account.Account;
 import com.ghostcompany.mystats.Model.Account.ETransactionType;
 import com.ghostcompany.mystats.Model.Account.Transaction;
 import com.ghostcompany.mystats.Model.Activity.Activity;
-import com.ghostcompany.mystats.Service.AccountDAO;
-import com.ghostcompany.mystats.Service.ActivityDAO;
-import com.ghostcompany.mystats.Service.ActivityEntryDAO;
-import com.ghostcompany.mystats.Service.TransactionDAO;
+import com.ghostcompany.mystats.Model.Activity.ActivityEntry;
+import com.ghostcompany.mystats.Service.*;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -17,6 +16,8 @@ import javafx.scene.text.Text;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -54,41 +55,56 @@ public class EntryController implements Initializable {
 
     private Account selectedAccount;
     private Transaction selectedTransaction;
+    private Activity selectedActivity;
+    private ActivityEntry selectedActivityEntry;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
-            this.accounts = accountHandler.getAllAccounts();
-            this.activities = activityHandler.getActivities();
+            accounts = accountHandler.getAllAccounts();
+            activities = activityHandler.getActivities();
 
-            accounts.forEach(account -> accountSelect.getItems().add(account.getAccountName()));
+            // Populate ChoiceBox for activities and accounts
+            activitySelect.getItems().addAll(activities.stream().map(Activity::getName).toList());
+            accountSelect.getItems().addAll(accounts.stream().map(Account::getAccountName).toList());
 
-            accountSelect.setOnAction(this::setAccount);
-            accountSelect.setValue("Select Account");
+            accountSelect.setAccessibleText("Select Account");
+            activitySelect.setAccessibleText("Select Activity");
 
-            selectedTransaction = new Transaction(0, selectedAccount.getId(), 0, "", LocalDate.now(), ETransactionType.DEPOSIT);
-
-            // Initialize date fields to today’s date
+            // Set today’s date as the default value for date pickers
             datePicker.setValue(LocalDate.now());
             startTime.setValue(LocalDate.now());
             endTime.setValue(LocalDate.now());
 
+            accountSelect.setOnAction(this::setAccount);
+            activitySelect.setOnAction(this::setActivity);
+
+            selectedActivity = activities.getFirst();
+            selectedAccount = accounts.getFirst();  // Default to the first account
+            initializeTransaction();
         } catch (SQLException e) {
             descriptionErrorField.setText("Error loading accounts or activities.");
             e.printStackTrace();
         }
     }
 
+    private void initializeTransaction() {
+        selectedTransaction = new Transaction(0, selectedAccount.getId(), 0, "",
+                LocalDate.now(), ETransactionType.DEPOSIT);
+    }
+
     public void setAccount(ActionEvent event) {
         String selectedAccountName = accountSelect.getValue();
-        this.selectedAccount = accounts.stream()
+        selectedAccount = accounts.stream()
                 .filter(account -> account.getAccountName().equals(selectedAccountName))
                 .findFirst()
                 .orElse(null);
 
         if (selectedAccount != null) {
-            selectedTransaction = new Transaction(
-                    1, selectedAccount.getId(), 0, "", datePicker.getValue(), ETransactionType.WITHDRAWAL);
+            initializeTransaction();  // Reset transaction with the new account
+            amountField.setPromptText("Enter Amount");
+            descriptionField.setPromptText("Enter Description");
+            amountErrorField.setText("");  // Clear error message
         } else {
             descriptionErrorField.setText("Account not found!");
         }
@@ -98,9 +114,7 @@ public class EntryController implements Initializable {
         try {
             double amount = Double.parseDouble(amountField.getText());
             selectedTransaction.setAmount(amount);
-            amountErrorField.setText(""); // Clear error if amount is valid
-            System.out.println("\nAmount: " + amount + "\n");
-
+            amountErrorField.setText("");  // Clear error if valid
         } catch (NumberFormatException e) {
             amountErrorField.setText("Invalid amount. Please enter a valid number.");
         }
@@ -110,38 +124,40 @@ public class EntryController implements Initializable {
         String description = descriptionField.getText().trim();
         if (!description.isEmpty()) {
             selectedTransaction.setDescription(description);
-            descriptionErrorField.setText(""); // Clear error if description is valid
+            descriptionErrorField.setText("");  // Clear error if valid
         } else {
             descriptionErrorField.setText("Description cannot be empty.");
         }
     }
 
+    public void setActivityDescription(ActionEvent event) {
+        String description = activityDescription.getText().trim();
+        if (!description.isEmpty()) {
+            selectedActivityEntry.setDescription(description);
+            activityDescriptionErr.setText("");
+        } else {
+            activityDescriptionErr.setText("Activity cannot be empty.");
+        }
+    }
+
     public void setTransactionToIncome(ActionEvent event) {
-        incomeBtn.setStyle("-fx-background-color: DeepSkyBlue; -fx-text-fill: white;");
-        expenseBtn.setStyle("-fx-background-color: black; -fx-text-fill: white;");
-        selectedTransaction.setTransactionType(ETransactionType.DEPOSIT);
+        if (selectedTransaction.getType() != ETransactionType.DEPOSIT) {
+            incomeBtn.setStyle("-fx-background-color: DeepSkyBlue; -fx-text-fill: white;");
+            expenseBtn.setStyle("-fx-background-color: black; -fx-text-fill: white;");
+            selectedTransaction.setTransactionType(ETransactionType.DEPOSIT);
+        }
     }
 
     public void setTransactionToExpense(ActionEvent event) {
-        expenseBtn.setStyle("-fx-background-color: red; -fx-text-fill: white;");
-        incomeBtn.setStyle("-fx-background-color: black; -fx-text-fill: white;");
-        selectedTransaction.setTransactionType(ETransactionType.WITHDRAWAL);
+        if (selectedTransaction.getType() != ETransactionType.WITHDRAWAL) {
+            expenseBtn.setStyle("-fx-background-color: red; -fx-text-fill: white;");
+            incomeBtn.setStyle("-fx-background-color: black; -fx-text-fill: white;");
+            selectedTransaction.setTransactionType(ETransactionType.WITHDRAWAL);
+        }
     }
 
-
-    public void selectDate(ActionEvent actionEvent) {
-    }
-
-    public void saveExpenses(ActionEvent actionEvent) {
+    public void saveExpenses(ActionEvent event) {
         try {
-            if (selectedTransaction == null) {
-                descriptionErrorField.setText("No account selected.");
-                return;
-            }
-            if (selectedTransaction.getAmount() <= 0) {
-                amountErrorField.setText("Amount must be greater than 0.");
-                return;
-            }
             if (selectedTransaction.getDescription().isEmpty()) {
                 descriptionErrorField.setText("Description cannot be empty.");
                 return;
@@ -155,12 +171,44 @@ public class EntryController implements Initializable {
         }
     }
 
+    public void setActivity(ActionEvent event) {
+        String selectedActivityName = activitySelect.getValue();
+        activitySelect.setAccessibleText(selectedActivityName);
+        selectedActivity = activities.stream()
+                .filter(activity -> activity.getName().equals(selectedActivityName))
+                .findFirst()
+                .orElse(null);
+
+        if (selectedActivity != null) {
+            selectedActivityEntry = new ActivityEntry(0, "",
+                    LocalDateTime.of(startTime.getValue(), LocalTime.now()),
+                    LocalDateTime.of(endTime.getValue(), LocalTime.now()),
+                    selectedActivity.getId());
+        }
+    }
+
+    public void saveActivity(ActionEvent event) {
+        try {
+            if (selectedActivityEntry == null || selectedActivityEntry.getDescription().isEmpty()) {
+                activityDescriptionErr.setText("Description cannot be empty.");
+                return;
+            }
+
+            activityEntryHandler.addActivityEntry(selectedActivityEntry);
+            activityDescriptionErr.setText("Entry saved successfully!");
+        } catch (SQLException e) {
+            activityDescriptionErr.setText("Error saving entry.");
+            e.printStackTrace();
+        }
+    }
+
+    public void selectDate(ActionEvent actionEvent) {
+        
+    }
+
     public void setStartTime(ActionEvent actionEvent) {
     }
 
     public void setEndTime(ActionEvent actionEvent) {
-    }
-
-    public void saveActivity(ActionEvent actionEvent) {
     }
 }

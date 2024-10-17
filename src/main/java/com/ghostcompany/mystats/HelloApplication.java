@@ -1,5 +1,8 @@
 package com.ghostcompany.mystats;
 
+import atlantafx.base.theme.NordDark;
+import atlantafx.base.theme.PrimerDark;
+import atlantafx.base.theme.PrimerLight;
 import com.ghostcompany.mystats.Model.Account.Account;
 import com.ghostcompany.mystats.Model.Account.AccountGroup;
 import com.ghostcompany.mystats.Model.Account.ETransactionType;
@@ -23,8 +26,11 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
 
+        Application.setUserAgentStylesheet(new PrimerLight().getUserAgentStylesheet());
+
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("main.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
+
         stage.setTitle("Hello!");
         stage.setScene(scene);
         stage.show();

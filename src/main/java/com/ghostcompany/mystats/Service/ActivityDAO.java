@@ -1,43 +1,71 @@
 package com.ghostcompany.mystats.Service;
 
 import com.ghostcompany.mystats.Model.Activity.Activity;
-import com.ghostcompany.mystats.Model.Activity.ActivityGroup;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ActivityDAO {
+
+    // SQL Queries
+    private static final String INSERT_SQL = "INSERT INTO activities (name, group_id) VALUES (?, ?)";
+    private static final String SELECT_ALL_SQL = "SELECT * FROM activities";
+
+    // Add a new activity and return the generated ID.
     public int addActivity(Activity activity) throws SQLException {
-        String sql = "INSERT INTO activities (name, group_id) VALUES (?, ?)";
-        List<ActivityGroup> activityGroups = new ActivityGroupDAO().getAllActivityGroups();
-        try (Connection conn = Database.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+        validateActivity(activity);
+
+        try (Connection conn = Database.getConnection();
+             PreparedStatement ps = conn.prepareStatement(INSERT_SQL, Statement.RETURN_GENERATED_KEYS)) {
+
+            // Set parameters
             ps.setString(1, activity.getName());
             ps.setInt(2, activity.getGroupId());
-            ps.executeUpdate();
 
-            try(ResultSet rs = ps.getGeneratedKeys()) {
-                if(rs.next()) {
-                    return rs.getInt(1);
+            // Execute the query
+            int affectedRows = ps.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Failed to insert the activity: " + activity.getName());
+            }
+
+            // Retrieve generated ID
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    return rs.getInt(1); // Return the generated ID
                 } else {
-                    throw new SQLException("Failed to insert new activity on group " + activity.getName());
+                    throw new SQLException("No ID obtained for activity: " + activity.getName());
                 }
             }
         }
     }
 
+    // Retrieve all activities from the database.
     public List<Activity> getActivities() throws SQLException {
-        String sql = "SELECT * FROM activities";
         List<Activity> activities = new ArrayList<>();
-        try (Connection conn = Database.getConnection(); PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
-            while(rs.next()) {
-                Activity activity = new Activity(rs.getInt("id"), rs.getString("name"), rs.getInt("group_id"));
+
+        try (Connection conn = Database.getConnection();
+             PreparedStatement ps = conn.prepareStatement(SELECT_ALL_SQL);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Activity activity = new Activity(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getInt("group_id")
+                );
                 activities.add(activity);
             }
         }
         return activities;
+    }
+
+    // Validate the activity input.
+    private void validateActivity(Activity activity) {
+        if (activity.getName() == null || activity.getName().isEmpty()) {
+            throw new IllegalArgumentException("Activity name cannot be null or empty.");
+        }
+        if (activity.getGroupId() <= 0) {
+            throw new IllegalArgumentException("Group ID must be a positive integer.");
+        }
     }
 }

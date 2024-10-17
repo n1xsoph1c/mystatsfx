@@ -1,5 +1,4 @@
 module com.ghostcompany.mystats {
-    requires javafx.controls;
     requires javafx.fxml;
 
     requires org.controlsfx.controls;
@@ -8,6 +7,7 @@ module com.ghostcompany.mystats {
     requires org.kordamp.bootstrapfx.core;
     requires jdk.jdi;
     requires java.sql;
+    requires atlantafx.base;
 
     opens com.ghostcompany.mystats to javafx.fxml;
     opens com.ghostcompany.mystats.Controller to javafx.fxml;

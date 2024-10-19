@@ -1,10 +1,12 @@
 package com.ghostcompany.mystats.Service;
 
 import com.ghostcompany.mystats.Model.Account.Account;
+import javafx.beans.Observable;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.List;
 
 public class AccountDAO {
 
@@ -33,8 +35,8 @@ public class AccountDAO {
     }
 
     // Retrieve all accounts from the database.
-    public List<Account> getAllAccounts() throws SQLException {
-        List<Account> accounts = new ArrayList<>();
+    public ObservableList<Account> getAllAccounts() throws SQLException {
+        ObservableList<Account> accounts = FXCollections.observableArrayList();
 
         try (Connection conn = Database.getConnection();
              PreparedStatement ps = conn.prepareStatement(SELECT_ALL_SQL);

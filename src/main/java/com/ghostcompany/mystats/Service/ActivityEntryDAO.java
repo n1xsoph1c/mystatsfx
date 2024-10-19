@@ -1,6 +1,8 @@
 package com.ghostcompany.mystats.Service;
 
 import com.ghostcompany.mystats.Model.Activity.ActivityEntry;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -43,8 +45,8 @@ public class ActivityEntryDAO {
     }
 
     // Fetch all activity entries from the database.
-    public List<ActivityEntry> getAllEntries(int activity_id) throws SQLException {
-        List<ActivityEntry> entries = new ArrayList<>();
+    public ObservableList<ActivityEntry> getAllEntries(int activity_id) throws SQLException {
+        ObservableList<ActivityEntry> entries = FXCollections.observableArrayList();
 
         try (Connection conn = Database.getConnection();
              PreparedStatement ps = conn.prepareStatement(SELECT_ALL_SQL + " WHERE activity_id = " + activity_id);

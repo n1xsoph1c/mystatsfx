@@ -2,6 +2,8 @@ package com.ghostcompany.mystats.Service;
 
 import com.ghostcompany.mystats.Model.Account.ETransactionType;
 import com.ghostcompany.mystats.Model.Account.Transaction;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.sql.*;
 import java.time.LocalTime;
@@ -40,8 +42,8 @@ public class TransactionDAO {
     }
 
     // Retrieve all transactions for a specific account.
-    public List<Transaction> getTransactions(int account_id) throws SQLException {
-        List<Transaction> transactions = new ArrayList<>();
+    public ObservableList<Transaction> getTransactions(int account_id) throws SQLException {
+        ObservableList<Transaction> transactions = FXCollections.observableArrayList();
 
         try (Connection conn = Database.getConnection();
              PreparedStatement ps = conn.prepareStatement(SELECT_SQL)) {

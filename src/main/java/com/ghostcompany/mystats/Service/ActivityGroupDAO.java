@@ -1,6 +1,9 @@
 package com.ghostcompany.mystats.Service;
 
 import com.ghostcompany.mystats.Model.Activity.ActivityGroup;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,9 +33,9 @@ public class ActivityGroupDAO {
     }
 
     // Fetches all activity groups from the database
-    public List<ActivityGroup> getAllActivityGroups() throws SQLException {
+    public ObservableList<ActivityGroup> getAllActivityGroups() throws SQLException {
         String sql = "SELECT id, name FROM activity_groups";
-        List<ActivityGroup> activityGroups = new ArrayList<>();
+        ObservableList<ActivityGroup> activityGroups = FXCollections.observableArrayList();
 
         try (Connection conn = Database.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);

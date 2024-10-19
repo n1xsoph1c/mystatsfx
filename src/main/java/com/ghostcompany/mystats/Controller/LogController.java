@@ -65,7 +65,7 @@ public class LogController implements Initializable {
             }
             if (account.getTransactions().size() > 0) {
                 List<String> entry = List.of("", "", "Total: ", String.format("%.2f", account.getTotalAmount()));
-                listViewManager.addEntry(expenseView, entry);
+                listViewManager.addHeader(expenseView, entry);
             }
         }
 
@@ -74,7 +74,7 @@ public class LogController implements Initializable {
     @FXML
     private void populateActivityView() throws SQLException {
         activityView.getItems().clear();
-        List<String> activityHeaders = List.of("Start Time", "End Time", "Description", "Activity");
+        List<String> activityHeaders = List.of("Start Time", "End Time", "Description", "Activity", "Duration", "Group");
         listViewManager.addHeader(activityView, activityHeaders);
 
         List<Activity> activities = activityDAO.getActivities();
@@ -85,7 +85,9 @@ public class LogController implements Initializable {
                         entry.getStartTime().toString(),
                         entry.getEndTime().toString(),
                         entry.getDescription(),
-                        activity.getName()
+                        activity.getName(),
+                        entry.getDuration(),
+                        activity.getGroupName()
                 );
                 listViewManager.addEntry(activityView, activityEntry);
             }

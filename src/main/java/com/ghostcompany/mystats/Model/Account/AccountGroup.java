@@ -1,6 +1,8 @@
 package com.ghostcompany.mystats.Model.Account;
 
 import com.ghostcompany.mystats.Service.AccountDAO;
+import com.ghostcompany.mystats.Service.AccountGroupDAO;
+import javafx.collections.ObservableList;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -12,11 +14,14 @@ public class AccountGroup {
     private int id;
     private String name;
     private Map<String, Account> accounts = new HashMap<>();
+    private AccountGroupDAO accountGroupDAO = new AccountGroupDAO();
 
     public AccountGroup(int id, String name) {
         this.id = id;
         this.name = name;
     }
+
+    public AccountGroup() {}
 
     public int getId() { return id; }
     public String getName() { return name; }
@@ -46,8 +51,8 @@ public class AccountGroup {
         return balance; // Returning the total balance
     }
 
-
-    public Map<String, Account> getAccounts() {
-        return accounts;
+    public ObservableList<AccountGroup> getAccountGroups() throws SQLException {
+        return accountGroupDAO.getAllAccountGroups();
     }
+
 }

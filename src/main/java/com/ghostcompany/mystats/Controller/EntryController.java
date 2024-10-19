@@ -29,8 +29,8 @@ public class EntryController implements Initializable {
 
     @FXML private Text amountErrorField;
     @FXML private Text descriptionErrorField;
-    @FXML private Text startTimeErr;
-    @FXML private Text endTimeErr;
+    @FXML private Label startTimeErr;
+    @FXML private Label endTimeErr;
     @FXML private Text activityDescriptionErr;
 
     @FXML private Button incomeBtn;
@@ -38,9 +38,16 @@ public class EntryController implements Initializable {
     @FXML private Button saveActivityBtn;
     @FXML private Button saveExpenseBtn;
 
-    @FXML private DatePicker datePicker;
-    @FXML private DatePicker startTime;
-    @FXML private DatePicker endTime;
+    @FXML private DatePicker startDate;
+    @FXML private DatePicker endDate;
+
+    @FXML private ChoiceBox<String> startHour;
+    @FXML private ChoiceBox<String> startMinute;
+    @FXML private ChoiceBox<String> startAmPm;
+
+    @FXML private ChoiceBox<String> endHour;
+    @FXML private ChoiceBox<String> endMinute;
+    @FXML private ChoiceBox<String> endAmPm;
 
     @FXML private ChoiceBox<String> accountSelect;
     @FXML private ChoiceBox<String> activitySelect;
@@ -63,43 +70,47 @@ public class EntryController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
+            // Initialize accounts and activities
             accounts = accountHandler.getAllAccounts();
             activities = activityHandler.getActivities();
 
-            // Populate ChoiceBox for activities and accounts
+            // Populate ChoiceBoxes for activities and accounts
             activitySelect.getItems().addAll(activities.stream().map(Activity::getName).toList());
             accountSelect.getItems().addAll(accounts.stream().map(Account::getAccountName).toList());
 
-            accountSelect.setAccessibleText("Select Account");
-            activitySelect.setAccessibleText("Select Activity");
+            // Manually populate the hour, minute, and AM/PM ChoiceBoxes
+            initializeTimeFields();
 
-            // Set today’s date as the default value for date pickers
-            datePicker.setValue(LocalDate.now());
-            startTime.setValue(LocalDate.now());
-            endTime.setValue(LocalDate.now());
+            // Set default values (current date and time)
+            LocalDate currentDate = LocalDate.now();
+            startDate.setValue(currentDate);
+            endDate.setValue(currentDate);
+
+            LocalTime currentTime = LocalTime.now();
+            setDefaultTime(startHour, startMinute, startAmPm, currentTime);
+            setDefaultTime(endHour, endMinute, endAmPm, currentTime);
+
+            // Add listeners to update start and end time on any change
+            addTimeChangeListeners();
 
             accountSelect.setOnAction(this::setAccount);
             activitySelect.setOnAction(this::setActivity);
 
-            // Check for empty lists
-            if (!activities.isEmpty()) {
-                selectedActivity = activities.get(0);  // Use index
-            } else {
-                // Handle the case where activities are empty
-                activityDescriptionErr.setText("No activities available.");
-            }
-
             if (!accounts.isEmpty()) {
-                selectedAccount = accounts.get(0);  // Use index
+                selectedAccount = accounts.get(0);  // Use the first account
                 initializeTransaction();
             } else {
-                // Handle the case where accounts are empty
                 descriptionErrorField.setText("No accounts available.");
+            }
+
+            if (!activities.isEmpty()) {
+                selectedActivity = activities.get(0);  // Use the first activity
+            } else {
+                activityDescriptionErr.setText("No activities available.");
             }
 
             expenseBtn.setStyle("-fx-background-color: red; -fx-text-fill: white;");
             incomeBtn.setStyle("-fx-background-color: black; -fx-text-fill: white;");
-            selectedTransaction.setTransactionType(ETransactionType.WITHDRAWAL);
             isIncome = false;
 
         } catch (SQLException e) {
@@ -109,9 +120,100 @@ public class EntryController implements Initializable {
     }
 
     private void initializeTransaction() {
-        selectedTransaction = new Transaction(0, selectedAccount.getId(), 0, "",
-                LocalDate.now(), ETransactionType.DEPOSIT);
+        selectedTransaction = new Transaction(0, selectedAccount.getId(), 0, "", LocalDate.now(), ETransactionType.DEPOSIT);
     }
+
+    private void initializeTimeFields() {
+        // Populate hours (1 to 12)
+        for (int i = 1; i <= 12; i++) {
+            String hour = String.format("%02d", i);
+            startHour.getItems().add(hour);
+            endHour.getItems().add(hour);
+        }
+
+        // Populate minutes (00, 15, 30, 45)
+        for (int i = 0; i < 60; i += 15) {
+            String minute = String.format("%02d", i);
+            startMinute.getItems().add(minute);
+            endMinute.getItems().add(minute);
+        }
+
+        // Populate AM/PM options
+        startAmPm.getItems().addAll("AM", "PM");
+        endAmPm.getItems().addAll("AM", "PM");
+    }
+
+    private void setDefaultTime(ChoiceBox<String> hourBox, ChoiceBox<String> minuteBox, ChoiceBox<String> amPmBox, LocalTime time) {
+        int hour = time.getHour();
+        String amPm = (hour >= 12) ? "PM" : "AM";
+
+        if (hour > 12) hour -= 12;
+        else if (hour == 0) hour = 12;
+
+        hourBox.setValue(String.format("%02d", hour));
+        minuteBox.setValue(String.format("%02d", time.getMinute()));
+        amPmBox.setValue(amPm);
+    }
+
+    private void addTimeChangeListeners() {
+        // Add listeners to start time fields
+        startDate.setOnAction(this::updateStartTime);
+        startHour.setOnAction(this::updateStartTime);
+        startMinute.setOnAction(this::updateStartTime);
+        startAmPm.setOnAction(this::updateStartTime);
+
+        // Add listeners to end time fields
+        endDate.setOnAction(this::updateEndTime);
+        endHour.setOnAction(this::updateEndTime);
+        endMinute.setOnAction(this::updateEndTime);
+        endAmPm.setOnAction(this::updateEndTime);
+    }
+
+    private void updateStartTime(ActionEvent event) {
+        LocalDate date = startDate.getValue();
+        LocalTime time = getTimeFromInputs(startHour.getValue(), startMinute.getValue(), startAmPm.getValue());
+
+        if (date != null && time != null) {
+            if (selectedActivityEntry != null) {
+                selectedActivityEntry.setStartTime(LocalDateTime.of(date, time));
+            }
+            startTimeErr.setText("");  // Clear error message
+        } else {
+            startTimeErr.setText("Invalid start time.");
+        }
+    }
+
+    private void updateEndTime(ActionEvent event) {
+        LocalDate date = endDate.getValue();
+        LocalTime time = getTimeFromInputs(endHour.getValue(), endMinute.getValue(), endAmPm.getValue());
+
+        if (date != null && time != null) {
+            if (selectedActivityEntry != null) {
+                selectedActivityEntry.setEndTime(LocalDateTime.of(date, time));
+            }
+            endTimeErr.setText("");  // Clear error message
+        } else {
+            endTimeErr.setText("Invalid end time.");
+        }
+    }
+
+    private LocalTime getTimeFromInputs(String hourStr, String minuteStr, String amPm) {
+        try {
+            int hour = Integer.parseInt(hourStr);
+            int minute = Integer.parseInt(minuteStr);
+
+            // Convert to 24-hour format
+            if (amPm.equals("PM") && hour != 12) {
+                hour += 12;
+            } else if (amPm.equals("AM") && hour == 12) {
+                hour = 0;
+            }
+            return LocalTime.of(hour, minute);
+        } catch (NumberFormatException e) {
+            return null;  // Invalid time inputs
+        }
+    }
+
 
     public void setAccount(ActionEvent event) {
         String selectedAccountName = accountSelect.getValue();
@@ -121,7 +223,7 @@ public class EntryController implements Initializable {
                 .orElse(null);
 
         if (selectedAccount != null) {
-            initializeTransaction();  // Reset transaction with the new account
+            initializeTransaction();
             amountField.setPromptText("Enter Amount");
             descriptionField.setPromptText("Enter Description");
             amountErrorField.setText("");  // Clear error message
@@ -134,7 +236,7 @@ public class EntryController implements Initializable {
         try {
             double amount = Double.parseDouble(amountField.getText());
             selectedTransaction.setAmount(amount);
-            amountErrorField.setText("");  // Clear error if valid
+            amountErrorField.setText("");
         } catch (NumberFormatException e) {
             amountErrorField.setText("Invalid amount. Please enter a valid number.");
         }
@@ -144,7 +246,7 @@ public class EntryController implements Initializable {
         String description = descriptionField.getText().trim();
         if (!description.isEmpty()) {
             selectedTransaction.setDescription(description);
-            descriptionErrorField.setText("");  // Clear error if valid
+            descriptionErrorField.setText("");
         } else {
             descriptionErrorField.setText("Description cannot be empty.");
         }
@@ -156,22 +258,22 @@ public class EntryController implements Initializable {
             selectedActivityEntry.setDescription(description);
             activityDescriptionErr.setText("");
         } else {
-            activityDescriptionErr.setText("Activity cannot be empty.");
+            activityDescriptionErr.setText("Activity description cannot be empty.");
         }
     }
 
     public void setTransactionToIncome(ActionEvent event) {
-            incomeBtn.setStyle("-fx-background-color: DeepSkyBlue; -fx-text-fill: white;");
-            expenseBtn.setStyle("-fx-background-color: black; -fx-text-fill: white;");
-            selectedTransaction.setTransactionType(ETransactionType.DEPOSIT);
-            isIncome = true;
+        incomeBtn.setStyle("-fx-background-color: DeepSkyBlue; -fx-text-fill: white;");
+        expenseBtn.setStyle("-fx-background-color: black; -fx-text-fill: white;");
+        selectedTransaction.setTransactionType(ETransactionType.DEPOSIT);
+        isIncome = true;
     }
 
     public void setTransactionToExpense(ActionEvent event) {
-            expenseBtn.setStyle("-fx-background-color: red; -fx-text-fill: white;");
-            incomeBtn.setStyle("-fx-background-color: black; -fx-text-fill: white;");
-            selectedTransaction.setTransactionType(ETransactionType.WITHDRAWAL);
-            isIncome = false;
+        expenseBtn.setStyle("-fx-background-color: red; -fx-text-fill: white;");
+        incomeBtn.setStyle("-fx-background-color: black; -fx-text-fill: white;");
+        selectedTransaction.setTransactionType(ETransactionType.WITHDRAWAL);
+        isIncome = false;
     }
 
     public void saveExpenses(ActionEvent event) {
@@ -186,9 +288,6 @@ public class EntryController implements Initializable {
                 return;
             }
 
-            if (isIncome) selectedTransaction.setTransactionType(ETransactionType.DEPOSIT);
-            else selectedTransaction.setTransactionType(ETransactionType.WITHDRAWAL);
-
             transactionHandler.addTransaction(selectedTransaction);
             descriptionErrorField.setText("Transaction saved successfully!");
         } catch (SQLException e) {
@@ -199,17 +298,13 @@ public class EntryController implements Initializable {
 
     public void setActivity(ActionEvent event) {
         String selectedActivityName = activitySelect.getValue();
-        activitySelect.setAccessibleText(selectedActivityName);
         selectedActivity = activities.stream()
                 .filter(activity -> activity.getName().equals(selectedActivityName))
                 .findFirst()
                 .orElse(null);
 
         if (selectedActivity != null) {
-            selectedActivityEntry = new ActivityEntry(0, "",
-                    LocalDateTime.of(startTime.getValue(), LocalTime.now()),
-                    LocalDateTime.of(endTime.getValue(), LocalTime.now()),
-                    selectedActivity.getId());
+            selectedActivityEntry = new ActivityEntry(0, "", LocalDateTime.now(), LocalDateTime.now(), selectedActivity.getId());
         }
     }
 
@@ -219,22 +314,22 @@ public class EntryController implements Initializable {
                 activityDescriptionErr.setText("Description cannot be empty.");
                 return;
             }
-
-            activityEntryHandler.addActivityEntry(selectedActivityEntry);
-            activityDescriptionErr.setText("Entry saved successfully!");
+            selectedActivityEntry.addEntry(selectedActivityEntry);
+            activityDescriptionErr.setText("Activity saved successfully!");
         } catch (SQLException e) {
-            activityDescriptionErr.setText("Error saving entry.");
+            activityDescriptionErr.setText("Error saving activity.");
             e.printStackTrace();
         }
     }
 
-    public void selectDate(ActionEvent actionEvent) {
-        
+    public void setStartDate(ActionEvent actionEvent) {
+        updateStartTime(actionEvent);
     }
 
-    public void setStartTime(ActionEvent actionEvent) {
+    public void setEndDate(ActionEvent actionEvent) {
+        updateEndTime(actionEvent);
     }
 
-    public void setEndTime(ActionEvent actionEvent) {
-    }
+
+    public void selectDate(ActionEvent event) {}
 }

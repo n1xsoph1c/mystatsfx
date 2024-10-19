@@ -8,62 +8,66 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ghostcompany.mystats.Controller.AccountController">
+<AnchorPane prefHeight="400.0" prefWidth="587.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ghostcompany.mystats.Controller.AccountController">
    <children>
-      <TabPane prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
-        <tabs>
-          <Tab text="Add Account">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <TextField fx:id="accountName" layoutX="160.0" layoutY="183.0" onAction="#setAccountName" prefWidth="280.0" promptText="Account name">
-                           <font>
-                              <Font name="Roboto Black" size="12.0" />
-                           </font>
-                        </TextField>
-                        <Label fx:id="accountNameErr" alignment="CENTER" layoutX="160.0" layoutY="209.0" prefHeight="15.0" prefWidth="280.0" textFill="RED">
-                           <font>
-                              <Font name="Roboto Bold" size="12.0" />
-                           </font>
-                        </Label>
-                        <ChoiceBox fx:id="accountGroupChoiceBox" layoutX="160.0" layoutY="123.0" prefWidth="280.0" />
-                        <Label fx:id="choiceBoxErr" alignment="CENTER" layoutX="160.0" layoutY="149.0" prefHeight="15.0" prefWidth="280.0" textFill="RED">
-                           <font>
-                              <Font name="Roboto Bold" size="12.0" />
-                           </font>
-                        </Label>
-                        <Button layoutX="217.0" layoutY="252.0" mnemonicParsing="false" onAction="#createAccount" prefHeight="30.0" prefWidth="166.0" text="Create" />
-                        <Label fx:id="header" alignment="CENTER" layoutX="160.0" layoutY="61.0" prefHeight="15.0" prefWidth="280.0" text="Add A Account">
-                           <font>
-                              <Font name="Roboto Bold" size="20.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </AnchorPane>
-            </content>
-          </Tab>
-          <Tab onSelectionChanged="#populateAccountGroup" text="Account Group">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <ListView fx:id="accountGroupListView" prefHeight="342.0" prefWidth="600.0" />
-                     </children>
-                  </AnchorPane>
-            </content>
-          </Tab>
-            <Tab onSelectionChanged="#populateAccount" text="Account List">
-               <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <ListView fx:id="accountListView" prefHeight="343.0" prefWidth="600.0" />
-                     </children>
-                  </AnchorPane>
-               </content>
-            </Tab>
-        </tabs>
-      </TabPane>
+      <HBox alignment="CENTER" prefHeight="400.0" prefWidth="600.0">
+         <children>
+            <TabPane prefHeight="400.0" prefWidth="636.0" tabClosingPolicy="UNAVAILABLE" HBox.hgrow="ALWAYS">
+              <tabs>
+                <Tab text="Add Account">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <TextField fx:id="accountName" layoutX="160.0" layoutY="183.0" onAction="#setAccountName" prefWidth="280.0" promptText="Account name">
+                                 <font>
+                                    <Font name="Roboto Black" size="12.0" />
+                                 </font>
+                              </TextField>
+                              <Label fx:id="accountNameErr" alignment="CENTER" layoutX="160.0" layoutY="209.0" prefHeight="15.0" prefWidth="280.0" textFill="RED">
+                                 <font>
+                                    <Font name="Roboto Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <ChoiceBox fx:id="accountGroupChoiceBox" layoutX="160.0" layoutY="123.0" prefWidth="280.0" />
+                              <Label fx:id="choiceBoxErr" alignment="CENTER" layoutX="160.0" layoutY="149.0" prefHeight="15.0" prefWidth="280.0" textFill="RED">
+                                 <font>
+                                    <Font name="Roboto Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <Button layoutX="217.0" layoutY="252.0" mnemonicParsing="false" onAction="#createAccount" prefHeight="30.0" prefWidth="166.0" text="Create" />
+                              <Label fx:id="header" alignment="CENTER" layoutX="160.0" layoutY="61.0" prefHeight="15.0" prefWidth="280.0" text="Add A Account">
+                                 <font>
+                                    <Font name="Roboto Bold" size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+                <Tab onSelectionChanged="#populateAccountGroup" text="Account Group">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <ListView fx:id="accountGroupListView" prefHeight="342.0" prefWidth="600.0" />
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+                  <Tab onSelectionChanged="#populateAccount" text="Account List">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <ListView fx:id="accountListView" prefHeight="343.0" prefWidth="600.0" />
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
+              </tabs>
+            </TabPane>
+         </children>
+      </HBox>
    </children>
 </AnchorPane>

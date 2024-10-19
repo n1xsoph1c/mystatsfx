@@ -1,6 +1,8 @@
 package com.ghostcompany.mystats.Service;
 
 import com.ghostcompany.mystats.Model.Account.AccountGroup;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -38,8 +40,8 @@ public class AccountGroupDAO {
     }
 
     // Retrieve all account groups from the database.
-    public List<AccountGroup> getAllAccountGroups() throws SQLException {
-        List<AccountGroup> groups = new ArrayList<>();
+    public ObservableList<AccountGroup> getAllAccountGroups() throws SQLException {
+        ObservableList<AccountGroup> groups = FXCollections.observableArrayList();
 
         try (Connection conn = Database.getConnection();
              PreparedStatement ps = conn.prepareStatement(SELECT_ALL_SQL);
